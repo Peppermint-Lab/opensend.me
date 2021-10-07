@@ -17,16 +17,26 @@ export default async function upload(req, res) {
         signatureVersion: "v4",
         region: "eu-west-2",
       });
+
       const s3 = new aws.S3();
       const params = {
-        Bucket: "opensend", // pass your bucket name
+        Bucket: "lon.opensend.me", // pass your bucket name
         Key: String(files.file.name), // file will be saved as testBucket/contacts.csv
         Body: fs.createReadStream(files.file.path),
       };
+
+      
       s3.upload(params, function (s3Err, data) {
         if (s3Err) throw s3Err;
+        console.log(data);
         console.log(`File uploaded successfully at ${data.Location}`);
-        res.status(200);
+        res
+          .status(200)
+          .json({
+            message: "File was successfully uploaded",
+            ETag: data.ETag,
+            success: true,
+          });
       });
 
       // console.log(files.file);
