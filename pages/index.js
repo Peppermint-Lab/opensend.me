@@ -1,19 +1,15 @@
 import Head from "next/head";
 import { Upload, message } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
+import { useState } from "react";
 
 export default function Home() {
   const { Dragger } = Upload;
+  const [fileID, setFileID] = useState("");
 
   const props = {
     name: "file",
     multiple: false,
-    action: "/api/upload",
-    data: (file) => {
-      let data = new FormData();
-      data.append("file", file);
-      data.append("filename", file.name);
-    },
     beforeUpload(file) {
       if (file.size > 10737418240) {
         message.error(`${file.name} upload failed due to size over 10GB`);
@@ -21,12 +17,15 @@ export default function Home() {
       return true;
     },
     onChange(info) {
+
       const { status } = info.file;
+
       if (status !== "uploading") {
         console.log(info.file, info.fileList);
       }
-      if (status === "done") {
+      if (status === "done" && info.file.response.success === true) {
         message.success(`${info.file.name} file uploaded successfully.`);
+        setFileID(info.file.response.fileID);
       } else if (status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
@@ -34,6 +33,30 @@ export default function Home() {
     onDrop(e) {
       console.log("Dropped files", e.dataTransfer.files);
     },
+  };
+
+  const uploadPhoto = async (e) => {
+    console.log(e);
+    const file = e.target.files[0];
+    const filename = encodeURIComponent(file.name);
+    const res = await fetch(`/api/upload?file=${filename}`);
+    const { url, fields } = await res.json();
+    const formData = new FormData();
+
+    Object.entries({ ...fields, file }).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    const upload = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (upload.ok) {
+      message.success(`File uploaded successfully.`);
+    } else {
+      message.error(`File upload failed.`);
+    }
   };
 
   return (
@@ -66,6 +89,10 @@ export default function Home() {
           </Dragger>
         </div>
 
+        <input
+        onChange={uploadPhoto}
+        type="file"
+      />
       </main>
 
       <footer className="flex items-center justify-center w-full h-24 border-t">
