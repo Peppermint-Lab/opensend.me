@@ -1,8 +1,12 @@
 import aws from "aws-sdk";
+import { connectToDatabase } from "../../lib/mongo";
+
 const formidable = require("formidable");
 const fs = require("fs");
 
 export default async function upload(req, res) {
+  const { db } = await connectToDatabase();
+
   try {
     const form = formidable({ multiples: false });
     form.parse(req, (err, fields, files) => {
@@ -25,22 +29,21 @@ export default async function upload(req, res) {
         Body: fs.createReadStream(files.file.path),
       };
 
-      
-      s3.upload(params, function (s3Err, data) {
+      s3.upload(params, async function (s3Err, data) {
         if (s3Err) throw s3Err;
-        console.log(data);
         console.log(`File uploaded successfully at ${data.Location}`);
-        res
-          .status(200)
-          .json({
-            message: "File was successfully uploaded",
-            ETag: data.ETag,
-            success: true,
-          });
-      });
 
-      // console.log(files.file);
-      res.status(200).json({ fields, files });
+        const file = await db.collection("aws").insertOne({
+          url: data.Location,
+          filename: files.file.name,
+        });
+
+        res.status(200).json({
+          message: "File was successfully uploaded",
+          success: true,
+          fileID: file.insertedId,
+        });
+      });
     });
   } catch (error) {
     console.log(error);

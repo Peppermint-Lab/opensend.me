@@ -1,23 +1,9 @@
 import Head from "next/head";
 import { Upload, message } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
-import fileDownload from "js-file-download";
-import axios from "axios";
 
 export default function Home() {
   const { Dragger } = Upload;
-
-  function download() {
-    const url = `https://s3.eu-west-2.amazonaws.com/lon.opensend.me/putty-64bit-0.76-installer.msi`;
-    axios
-      .get(url, {
-        method: "get",
-        responseType: "blob",
-      })
-      .then((res) => {
-        fileDownload(res.data, "putty.msi");
-      });
-  }
 
   const props = {
     name: "file",
@@ -60,8 +46,8 @@ export default function Home() {
       <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
         <h1 className="text-6xl font-bold">
           Welcome to{" "}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
+          <a className="text-blue-600" href="">
+            opensend.me
           </a>
         </h1>
 
@@ -80,13 +66,6 @@ export default function Home() {
           </Dragger>
         </div>
 
-        <button
-          onClick={() => download()}
-          type="button"
-          className="float-right  border border-transparent rounded-full shadow-sm hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Download ME
-        </button>
       </main>
 
       <footer className="flex items-center justify-center w-full h-24 border-t">
