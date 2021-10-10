@@ -3,8 +3,6 @@ import { InboxOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import axios from "axios";
 
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-
 export default function Home() {
   const [loading, setLoading] = useState(false);
   const { Dragger } = Upload;
@@ -50,55 +48,16 @@ export default function Home() {
             })
             .catch((error) => {
               onError(error);
-              console.log(error)
+              console.log(error);
             });
-
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
         });
     },
-    // onChange(info) {
-    //   const { status } = info.file;
-    //   if (status !== "uploading") {
-    //     console.log(info.file, info.fileList);
-    //   }
-    //   if (status === "done") {
-    //     message.success(`${info.file.name} file uploaded successfully.`);
-    //   } else if (status === "error") {
-    //     message.error(`${info.file.name} file upload failed.`);
-    //   }
-    // },
     onDrop(e) {
       console.log("Dropped files", e.dataTransfer.files);
     },
-  };
-
-  const uploadPhoto = async (e) => {
-    const file = e.target.files[0];
-    const filename = encodeURIComponent(file.name);
-    const res = await fetch(`/api/upload?file=${filename}`);
-    const { url, fields, fileID } = await res.json();
-    const formData = new FormData();
-
-    Object.entries({ ...fields, file }).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-
-    setUploading(true);
-
-    const upload = await fetch(url, {
-      method: "POST",
-      body: formData,
-    });
-
-    if (upload.ok) {
-      setUploading(false);
-      message.success(`File uploaded successfully.`);
-      alert(`Youre download URL is https://opensend.me/download/${fileID}`);
-    } else {
-      message.error(`File upload failed.`);
-    }
   };
 
   return (
