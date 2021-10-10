@@ -7,31 +7,8 @@ export default function Home() {
   const { Dragger } = Upload;
   const [fileID, setFileID] = useState("");
 
-  const props = {
-    name: "file",
-    multiple: false,
-    beforeUpload(file) {
-      if (file.size > 10737418240) {
-        message.error(`${file.name} upload failed due to size over 10GB`);
-      }
-      return true;
-    },
-    onChange(e) {
-      const file = e;
-      const { status } = file.file
-      if(status === "done") {
-        uploadPhoto(file)
-        console.log("uploading to aws")
-      }
-    },
-    onDrop(e) {
-      console.log("Dropped files", e.dataTransfer.files);
-    },
-  };
-
   const uploadPhoto = async (e) => {
     const file = e.target.files[0];
-    // const file = info.file
     const filename = encodeURIComponent(file.name);
     const res = await fetch(`/api/upload?file=${filename}`);
     const { url, fields, fileID } = await res.json();
@@ -39,6 +16,7 @@ export default function Home() {
 
     Object.entries({ ...fields, file }).forEach(([key, value]) => {
       formData.append(key, value);
+      console.log(formData);
     });
 
     const upload = await fetch(url, {
@@ -48,7 +26,7 @@ export default function Home() {
 
     if (upload.ok) {
       message.success(`File uploaded successfully.`);
-      alert(`Youre download URL is https://opensend.me/download/${fileID}`);
+      // alert(`Youre download URL is https://opensend.me/download/${fileID}`);
     } else {
       message.error(`File upload failed.`);
     }
@@ -70,24 +48,8 @@ export default function Home() {
         </h1>
 
         <div className="mt-4">
-          {/* <Dragger {...props}>
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">
-              Click or drag file to this area to upload
-            </p>
-            <p className="px-8">
-              Support for a single files only currenly. Strictly prohibit from
-              uploading company data or other band files
-            </p>
-          </Dragger> */}
+          <input onChange={uploadPhoto} type="file" />
         </div>
-
-        <input
-        onChange={uploadPhoto}
-        type="file"
-      />
       </main>
 
       <footer className="flex items-center justify-center w-full h-24 border-t">
