@@ -1,6 +1,7 @@
 import fileDownload from "js-file-download";
 import axios from "axios";
 import { useQuery } from "react-query";
+import Image from "next/image";
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -66,6 +67,47 @@ export default function Download({ id }) {
               >
                 Download ME
               </button>
+            </div>
+          )}
+
+          {status === "success" && data.success === false && (
+            <div>
+              <div className="">
+                <Image
+                  src="/undraw_page_not_found_su7k.svg"
+                  height={100}
+                  width={200}
+                />
+                <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between">
+                  <h2 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    <span className="block">
+                      Sorry there doesnt seem to be a file with this link?
+                    </span>
+                    <span className="block text-indigo-600">
+                      Upload your file today!
+                    </span>
+                  </h2>
+                </div>
+
+                <div className="mt-8 flex justify-center lg:mt-0 lg:flex-shrink-0">
+                  <div className="inline-flex rounded-md shadow">
+                    <a
+                      href="/"
+                      className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                    >
+                      Get started
+                    </a>
+                  </div>
+                  <div className="ml-3 inline-flex rounded-md shadow">
+                    <a
+                      href="#"
+                      className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50"
+                    >
+                      Learn more
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>
