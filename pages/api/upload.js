@@ -4,8 +4,6 @@ import { connectToDatabase } from "../../lib/mongo";
 export default async function upload(req, res) {
   const { db } = await connectToDatabase();
 
-  console.log(process.env.REGION);
-
   try {
     aws.config.update({
       accessKeyId: process.env.ACCESS_KEY,
