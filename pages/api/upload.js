@@ -8,7 +8,7 @@ export default async function upload(req, res) {
     aws.config.update({
       accessKeyId: process.env.ACCESS_KEY,
       secretAccessKey: process.env.SECRET_KEY,
-      region: "eu-west-2",
+      region: process.env.REGION,
       signatureVersion: "v4",
     });
 
