@@ -1,4 +1,3 @@
-import fileDownload from "js-file-download";
 import axios from "axios";
 import { useQuery } from "react-query";
 import Image from "next/image";
@@ -20,21 +19,7 @@ export default function Download({ id }) {
   };
 
   const { data, status } = useQuery("fetchURL", fetchURL);
-
-  console.log(data, status);
-
-  async function download() {
-    const u = `${data.details.url}/${data.details.filename}`;
-    await axios
-      .get(u, {
-        method: "get",
-        responseType: "blob",
-      })
-      .then((res) => {
-        fileDownload(res.data, data.details.filename);
-      });
-  }
-
+  
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
@@ -60,13 +45,14 @@ export default function Download({ id }) {
 
           {status === "success" && data.success === true && (
             <div>
+              <a href={`${data.details.url}/${data.details.filename}`} target="_blank" rel="noopener noreferrer" download>
               <button
-                onClick={() => download()}
                 type="button"
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Donwload File
               </button>
+              </a>
             </div>
           )}
 
