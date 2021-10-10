@@ -16,31 +16,19 @@ export default function Home() {
       }
       return true;
     },
-    onChange(info) {
-
-      const { status } = info.file;
-
-      if (status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (status === "done" && info.file.response.success === true) {
-        message.success(`${info.file.name} file uploaded successfully.`);
-        setFileID(info.file.response.fileID);
-      } else if (status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
+    onChange(file) {
+      uploadPhoto(file)
     },
     onDrop(e) {
       console.log("Dropped files", e.dataTransfer.files);
     },
   };
 
-  const uploadPhoto = async (e) => {
-    console.log(e);
-    const file = e.target.files[0];
+  const uploadPhoto = async (info) => {
+    const file = info.file
     const filename = encodeURIComponent(file.name);
     const res = await fetch(`/api/upload?file=${filename}`);
-    const { url, fields } = await res.json();
+    const { url, fields, fileID } = await res.json();
     const formData = new FormData();
 
     Object.entries({ ...fields, file }).forEach(([key, value]) => {
@@ -54,6 +42,7 @@ export default function Home() {
 
     if (upload.ok) {
       message.success(`File uploaded successfully.`);
+      alert(`Youre download URL is https://opensend.me/download/${fileID}`);
     } else {
       message.error(`File upload failed.`);
     }
@@ -89,10 +78,10 @@ export default function Home() {
           </Dragger>
         </div>
 
-        <input
+        {/* <input
         onChange={uploadPhoto}
         type="file"
-      />
+      /> */}
       </main>
 
       <footer className="flex items-center justify-center w-full h-24 border-t">

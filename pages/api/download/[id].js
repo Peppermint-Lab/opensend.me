@@ -6,8 +6,6 @@ export default async function download(req, res) {
 
   const { id } = req.query;
 
-  console.log(id);
-
   try {
     const details = await db.collection("aws").findOne({
       _id: ObjectID(id),

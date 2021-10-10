@@ -3,17 +3,16 @@ import axios from "axios";
 import { useQuery } from "react-query";
 
 export async function getServerSideProps(context) {
-  const { id } = context.query 
+  const { id } = context.query;
 
   return {
     props: {
       id: id,
-    }, // will be passed to the page component as props
-  }
+    },
+  };
 }
 
-export default function Download({ id, }) {
-
+export default function Download({ id }) {
   const fetchURL = async () => {
     const res = await fetch(`/api/download/${id}`);
     return res.json();
@@ -21,10 +20,10 @@ export default function Download({ id, }) {
 
   const { data, status } = useQuery("fetchURL", fetchURL);
 
-  console.log(data);
+  console.log(data)
 
   async function download() {
-    const u = `${data.details.url}`;
+    const u = `${data.details.url}/${data.details.filename}`;
     await axios
       .get(u, {
         method: "get",
@@ -45,14 +44,18 @@ export default function Download({ id, }) {
           </a>
         </h1>
 
-        <div className="mt-4s">
-          <button
-            onClick={() => download()}
-            type="button"
-            className="float-right  border border-transparent rounded-full shadow-sm hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Download ME
-          </button>
+        <div className="mt-4">
+          {status === "success" && (
+            <div>
+              <button
+                onClick={() => download()}
+                type="button"
+                className="float-right  border border-transparent rounded-full shadow-sm hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Download ME
+              </button>
+            </div>
+          )}
         </div>
       </main>
 
