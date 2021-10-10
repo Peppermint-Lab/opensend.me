@@ -65,10 +65,16 @@ export default function Home() {
       <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
         <h1 className="text-6xl font-bold">
           Welcome to{" "}
-          <a className="text-blue-600" href="">
+          <a className="text-blue-600" href="https://github.com/Peppermint-Lab/opensend" target="_blank">
             opensend.me
           </a>
         </h1>
+
+        <h2 className="text-2xl font-bold">
+          Upload upto 10GB files with public links that last 24 hours!
+        </h2>
+
+        <p>All files are sent through the browser so speed will depend on your connection.</p>
 
         <div className="mt-4">
           <Dragger {...props} disabled={loading}>
@@ -83,36 +89,8 @@ export default function Home() {
               uploading company data or other band files
             </p>
           </Dragger>
-
-          {/* {uploading === true && (
-            <div>
-              <h1>
-                Uploading file, this is done client side, so depending on your
-                upload speed will determine how long this takes
-              </h1>
-              <Loader
-                type="ThreeDots"
-                color="#00BFFF"
-                height={100}
-                width={100}
-                visible={uploading}
-              />
-            </div>
-          )} */}
         </div>
       </main>
-
-      <footer className="flex items-center justify-center w-full h-24 border-t">
-        <a
-          className="flex items-center justify-center"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <img src="/vercel.svg" alt="Vercel Logo" className="h-4 ml-2" />
-        </a>
-      </footer>
     </div>
   );
 }
