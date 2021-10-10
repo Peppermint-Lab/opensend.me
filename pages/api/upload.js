@@ -27,7 +27,7 @@ export default async function upload(req, res) {
       createdAt: new Date(),
     });
 
-    console.log(file);
+    console.log(post);
 
     res.status(200).json({
       url: post.url,

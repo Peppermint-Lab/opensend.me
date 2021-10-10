@@ -16,16 +16,22 @@ export default function Home() {
       }
       return true;
     },
-    onChange(file) {
-      uploadPhoto(file)
+    onChange(e) {
+      const file = e;
+      const { status } = file.file
+      if(status === "done") {
+        uploadPhoto(file)
+        console.log("uploading to aws")
+      }
     },
     onDrop(e) {
       console.log("Dropped files", e.dataTransfer.files);
     },
   };
 
-  const uploadPhoto = async (info) => {
-    const file = info.file
+  const uploadPhoto = async (e) => {
+    const file = e.target.files[0];
+    // const file = info.file
     const filename = encodeURIComponent(file.name);
     const res = await fetch(`/api/upload?file=${filename}`);
     const { url, fields, fileID } = await res.json();
@@ -63,8 +69,8 @@ export default function Home() {
           </a>
         </h1>
 
-        <div className="mt-4s">
-          <Dragger {...props}>
+        <div className="mt-4">
+          {/* <Dragger {...props}>
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
             </p>
@@ -75,13 +81,13 @@ export default function Home() {
               Support for a single files only currenly. Strictly prohibit from
               uploading company data or other band files
             </p>
-          </Dragger>
+          </Dragger> */}
         </div>
 
-        {/* <input
+        <input
         onChange={uploadPhoto}
         type="file"
-      /> */}
+      />
       </main>
 
       <footer className="flex items-center justify-center w-full h-24 border-t">
