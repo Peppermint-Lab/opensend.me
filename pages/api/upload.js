@@ -4,18 +4,20 @@ import { connectToDatabase } from "../../lib/mongo";
 export default async function upload(req, res) {
   const { db } = await connectToDatabase();
 
+  console.log(process.env.REGION);
+
   try {
     aws.config.update({
-      accessKeyId: "AKIA35J4CBUCYZRNPC5T",
-      secretAccessKey: "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",
-      signatureVersion: "v4",
+      accessKeyId: process.env.ACCESS_KEY,
+      secretAccessKey: process.env.SECRET_KEY,
       region: "eu-west-2",
+      signatureVersion: "v4",
     });
 
     const s3 = new aws.S3();
 
     const post = await s3.createPresignedPost({
-      Bucket: "lon.opensend.me",
+      Bucket: process.env.BUCKET_NAME,
       Fields: {
         key: req.query.file,
       },
