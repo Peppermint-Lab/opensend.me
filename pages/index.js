@@ -1,11 +1,11 @@
 import Head from "next/head";
-import { Upload, message } from "antd";
-import { InboxOutlined } from "@ant-design/icons";
+import { message } from "antd";
 import { useState } from "react";
 
 export default function Home() {
-  const { Dragger } = Upload;
-  const [fileID, setFileID] = useState("");
+  const [uploading, setUploading] = useState(false);
+
+  console.log(uploading)
 
   const uploadPhoto = async (e) => {
     const file = e.target.files[0];
@@ -16,17 +16,19 @@ export default function Home() {
 
     Object.entries({ ...fields, file }).forEach(([key, value]) => {
       formData.append(key, value);
-      console.log(formData);
     });
+
+    setUploading(true)
 
     const upload = await fetch(url, {
       method: "POST",
       body: formData,
-    });
+    })
 
     if (upload.ok) {
+      setUploading(false)
       message.success(`File uploaded successfully.`);
-      // alert(`Youre download URL is https://opensend.me/download/${fileID}`);
+      alert(`Youre download URL is https://opensend.me/download/${fileID}`);
     } else {
       message.error(`File upload failed.`);
     }
@@ -49,6 +51,11 @@ export default function Home() {
 
         <div className="mt-4">
           <input onChange={uploadPhoto} type="file" />
+          {uploading === true && (
+            <div>
+              <p>uploading file</p>
+            </div>
+          )}
         </div>
       </main>
 
