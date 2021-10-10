@@ -7,13 +7,17 @@ export default async function download(req, res) {
   const { id } = req.query;
 
   try {
-    const details = await db.collection("aws").findOne({
-      _id: ObjectID(id),
-    });
 
-    res.status(200).json({ details, sucess: true });
+    if(ObjectID.isValid(id)) {
+      const details = await db.collection("aws").findOne({
+        _id: ObjectID(id),
+      })
+
+      res.status(200).json({ details, success: true });
+    } else {
+      res.status(500).json({ success: false });
+    }
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error });
   }
 }

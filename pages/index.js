@@ -1,11 +1,78 @@
-import Head from "next/head";
-import { message } from "antd";
+import { Upload, message } from "antd";
+import { InboxOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import axios from "axios";
+
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 export default function Home() {
-  const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { Dragger } = Upload;
 
-  console.log(uploading)
+  const props = {
+    name: "file",
+    multiple: false,
+    customRequest({ file, onError, onSuccess, onProgress }) {
+      setLoading(true);
+
+      const filename = encodeURIComponent(file.name);
+      fetch(`/api/upload?file=${filename}`)
+        .then((res) => res.json())
+        .then(async (res) => {
+          const { url, fields, fileID } = await res;
+          const formData = new FormData();
+
+          Object.entries({ ...fields, file }).forEach(([key, value]) => {
+            formData.append(key, value);
+          });
+
+          var options = {
+            onUploadProgress: (event) => {
+              const { loaded, total } = event;
+              onProgress(
+                {
+                  percent: Math.round((loaded / total) * 100),
+                },
+                file
+              );
+            },
+          };
+
+          axios
+            .post(url, formData, options)
+            .then((result) => {
+              setLoading(false);
+              onSuccess(result, file);
+              message.success("Successfully Upload!");
+              alert(
+                `Youre download URL is https://opensend.me/download/${fileID}`
+              );
+            })
+            .catch((error) => {
+              onError(error);
+              console.log(error)
+            });
+
+        })
+        .catch((error) => {
+          console.log(error)
+        });
+    },
+    // onChange(info) {
+    //   const { status } = info.file;
+    //   if (status !== "uploading") {
+    //     console.log(info.file, info.fileList);
+    //   }
+    //   if (status === "done") {
+    //     message.success(`${info.file.name} file uploaded successfully.`);
+    //   } else if (status === "error") {
+    //     message.error(`${info.file.name} file upload failed.`);
+    //   }
+    // },
+    onDrop(e) {
+      console.log("Dropped files", e.dataTransfer.files);
+    },
+  };
 
   const uploadPhoto = async (e) => {
     const file = e.target.files[0];
@@ -18,15 +85,15 @@ export default function Home() {
       formData.append(key, value);
     });
 
-    setUploading(true)
+    setUploading(true);
 
     const upload = await fetch(url, {
       method: "POST",
       body: formData,
-    })
+    });
 
     if (upload.ok) {
-      setUploading(false)
+      setUploading(false);
       message.success(`File uploaded successfully.`);
       alert(`Youre download URL is https://opensend.me/download/${fileID}`);
     } else {
@@ -36,11 +103,6 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
         <h1 className="text-6xl font-bold">
           Welcome to{" "}
@@ -50,12 +112,34 @@ export default function Home() {
         </h1>
 
         <div className="mt-4">
-          <input onChange={uploadPhoto} type="file" />
-          {uploading === true && (
+          <Dragger {...props} disabled={loading}>
+            <p className="ant-upload-drag-icon">
+              <InboxOutlined />
+            </p>
+            <p className="ant-upload-text">
+              Click or drag file to this area to upload
+            </p>
+            <p className="ant-upload-hint">
+              Support for a single or bulk upload. Strictly prohibit from
+              uploading company data or other band files
+            </p>
+          </Dragger>
+
+          {/* {uploading === true && (
             <div>
-              <p>uploading file</p>
+              <h1>
+                Uploading file, this is done client side, so depending on your
+                upload speed will determine how long this takes
+              </h1>
+              <Loader
+                type="ThreeDots"
+                color="#00BFFF"
+                height={100}
+                width={100}
+                visible={uploading}
+              />
             </div>
-          )}
+          )} */}
         </div>
       </main>
 

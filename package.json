@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
+    "add": "^2.0.6",
     "antd": "^4.16.13",
     "aws-sdk": "^2.1002.0",
     "axios": "^0.22.0",
@@ -19,7 +20,10 @@
     "next-connect": "^0.10.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-query": "^3.25.1"
+    "react-dropzone": "^11.4.2",
+    "react-loader-spinner": "^4.0.0",
+    "react-query": "^3.25.1",
+    "yarn": "^1.22.15"
   },
   "devDependencies": {
     "autoprefixer": "^10.2.6",

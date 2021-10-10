@@ -20,7 +20,7 @@ export default function Download({ id }) {
 
   const { data, status } = useQuery("fetchURL", fetchURL);
 
-  console.log(data)
+  console.log(data, status);
 
   async function download() {
     const u = `${data.details.url}/${data.details.filename}`;
@@ -45,7 +45,19 @@ export default function Download({ id }) {
         </h1>
 
         <div className="mt-4">
-          {status === "success" && (
+          {status === "loading" && (
+            <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
+              <h2> Loading data ... </h2>
+            </div>
+          )}
+
+          {status === "error" && (
+            <div className="min-h-screen flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
+              <h2 className="text-2xl font-bold"> Error fetching data ... </h2>
+            </div>
+          )}
+
+          {status === "success" && data.success === true && (
             <div>
               <button
                 onClick={() => download()}
