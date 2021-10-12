@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useQuery } from "react-query";
 import Image from "next/image";
 
@@ -19,7 +18,7 @@ export default function Download({ id }) {
   };
 
   const { data, status } = useQuery("fetchURL", fetchURL);
-  
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
@@ -45,13 +44,18 @@ export default function Download({ id }) {
 
           {status === "success" && data.success === true && (
             <div>
-              <a href={`${data.details.url}/${data.details.filename}`} target="_blank" rel="noopener noreferrer" download>
-              <button
-                type="button"
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              <a
+                href={`${data.details.url}/${data.details.filename}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                download
               >
-                Donwload File
-              </button>
+                <button
+                  type="button"
+                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Donwload File
+                </button>
               </a>
             </div>
           )}
@@ -98,6 +102,18 @@ export default function Download({ id }) {
           )}
         </div>
       </main>
+
+      <footer className="flex items-center justify-center w-full p-4 border-t">
+        <a
+          className="flex items-center justify-center"
+          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Powered by{" "}
+          <img src="/vercel.svg" alt="Vercel Logo" className="h-4 ml-2" />
+        </a>
+      </footer>
     </div>
   );
 }

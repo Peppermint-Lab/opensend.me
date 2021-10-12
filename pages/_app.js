@@ -3,7 +3,6 @@ import "antd/dist/antd.css";
 import Script from "next/script";
 import Head from "next/head";
 import { QueryClient, QueryClientProvider } from "react-query";
-import Layout from "../components/Layout";
 
 const queryClient = new QueryClient();
 
@@ -40,9 +39,7 @@ function MyApp({ Component, pageProps }) {
           <meta name="theme-color" content="#ffffff" />
         </Head>
 
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <Component {...pageProps} />
       </QueryClientProvider>
       <Script async src="https://cdn.splitbee.io/sb.js" strategy="lazyOnload" />
     </div>
