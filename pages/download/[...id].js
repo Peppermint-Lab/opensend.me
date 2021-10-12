@@ -2,19 +2,25 @@ import { useQuery } from "react-query";
 import Image from "next/image";
 
 export async function getServerSideProps(context) {
-  const { id } = context.query;
+  const { id, password } = context.query;
 
   return {
     props: {
       id: id,
+      password: password || null,
     },
   };
 }
 
-export default function Download({ id }) {
+export default function Download({ id, password }) {
   const fetchURL = async () => {
-    const res = await fetch(`/api/download/${id}`);
-    return res.json();
+    if (password === null) {
+      const res = await fetch(`/api/download/${id}`);
+      return res.json();
+    } else {
+      const res = await fetch(`/api/download/${id}/${password}`);
+      return res.json();
+    }
   };
 
   const { data, status } = useQuery("fetchURL", fetchURL);
@@ -44,6 +50,12 @@ export default function Download({ id }) {
 
           {status === "success" && data.success === true && (
             <div>
+              <div className="pb-3">
+                <ul>
+                  <li>FileName: {data.details.filename}</li>
+                  <li>Size: {data.details.size}</li>
+                </ul>
+              </div>
               <a
                 href={`${data.details.url}/${data.details.filename}`}
                 target="_blank"
