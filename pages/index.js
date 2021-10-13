@@ -22,7 +22,8 @@ export default function Home() {
       setLoading(true);
 
       const filename = encodeURIComponent(file.name);
-      fetch(`/api/upload?file=${filename}`)
+
+      fetch(`/api/upload?file=${filename}&size=${file.size}&type=${file.type}`)
         .then((res) => res.json())
         .then(async (res) => {
           const { url, fields, fileID } = await res;
