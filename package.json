@@ -13,6 +13,7 @@
     "antd": "^4.16.13",
     "aws-sdk": "^2.1002.0",
     "axios": "^0.22.0",
+    "bcryptjs": "^2.4.3",
     "bson-objectid": "^2.0.1",
     "formidable": "^1.2.2",
     "js-file-download": "^0.4.12",

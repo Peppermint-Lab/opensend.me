@@ -6,16 +6,23 @@ export default async function download(req, res) {
 
   const { id, password } = req.query;
 
-  console.log(req.query)
+  console.log(req.query);
 
   try {
-
-    if(ObjectID.isValid(id)) {
+    if (ObjectID.isValid(id)) {
       const details = await db.collection("aws_private").findOne({
         _id: ObjectID(id),
-      })
+      });
 
-      res.status(200).json({ details, success: true });
+      const isValid = await compare(password, details.password);
+
+      if (isValid) {
+        res.status(200).json({ details, success: true });
+      } else {
+        res
+          .status(500)
+          .json({ success: false, message: "Passwords don't match" });
+      }
     } else {
       res.status(500).json({ success: false });
     }
