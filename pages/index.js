@@ -86,7 +86,7 @@ export default function Home() {
         </h1>
 
         <h2 className="text-2xl font-bold">
-          Upload upto 10GB files with public links that last 24 hours!
+          Upload up to 10 GB files with public links that last 24 hours!
         </h2>
 
         <p>
@@ -100,11 +100,10 @@ export default function Home() {
               <InboxOutlined />
             </p>
             <p className="ant-upload-text">
-              Click or drag file to this area to upload
+              Choose a file or drag it here
             </p>
             <p className="px-4">
-              Support for a single or bulk upload. Strictly prohibit from
-              uploading company data or other band files
+              Supports multiple file upload. Strictly prohibited from uploading company data or illegal files.
             </p>
           </Dragger>
         </div>
