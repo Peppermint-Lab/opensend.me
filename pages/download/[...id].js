@@ -52,12 +52,12 @@ export default function Download({ id, password }) {
             <div>
               <div className="pb-3">
                 <ul>
-                  <li>FileName: {data.details.filename}</li>
-                  <li>Size: {data.details.size}</li>
+                  <li>FileName: {data.filename}</li>
+                  <li>Size: {data.size}</li>
                 </ul>
               </div>
               <a
-                href={`${data.details.url}/${data.details.filename}`}
+                href={`${data.url}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 download
