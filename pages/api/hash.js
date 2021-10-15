@@ -1,7 +1,7 @@
 import { connectToDatabase } from "../../lib/mongo";
 import { hash, genSalt, compare } from "bcryptjs";
 
-export default async function hash(req, res) {
+export default async function hashPassword(req, res) {
   const { db } = await connectToDatabase();
 
   const { id, password } = req.body;
